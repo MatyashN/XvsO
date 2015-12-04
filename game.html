@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>game</title>
+</head>
+<body>
+	<div class="mainWrap">
+		<div class="scoreboard">
+			<div>Победа "Х"<span id="xWonCounter">0</span></div>
+			<div>Победа "O"<span id="oWonCounter">0</span></div>
+			<div>Победила дружба<span id="deadHeatCounter">0</span></div>
+		</div>
+		<div class="wrapper" id="wrapper">
+			<div class="cell" id="x1"></div>
+			<div class="cell" id="x2"></div>
+			<div class="cell" id="x3"></div>
+			<div class="cell" id="x4"></div>
+			<div class="cell" id="x5"></div>
+			<div class="cell" id="x6"></div>
+			<div class="cell" id="x7"></div>
+			<div class="cell" id="x8"></div>
+			<div class="cell" id="x9"></div>
+	</div>
+	<div class="buttonClean" id="clean">Заново</div>
+	</div>
+	<script>
+		function makeCounter(){
+			var totalCounts = 1;
+			return {
+				getCount: function(){return totalCounts;},
+				increaseCount: function(){return ++totalCounts},
+				clean: function(){return totalCounts = 1}
+			}
+		}
+		var counter = makeCounter();
+
+		wrapper.onclick = function(e) {
+			var elem = e ? e.target : window.event.srcElement;
+			id = elem.id;
+			if (counter.getCount() % 2 && ( document.getElementById(id).className == "cell opacityX" || document.getElementById(id).className == "cell opacityO")){
+				counter.increaseCount();
+				document.getElementById(id).className = "cell x"}
+			if (!(counter.getCount() % 2) && ( document.getElementById(id).className == "cell opacityX" || document.getElementById(id).className == "cell opacityO")){
+				counter.increaseCount();
+				document.getElementById(id).className = "cell o"}
+			determineTheWinner();
+			}
+
+		function clean(){
+			var elementsMass = [];
+			elementsMass = document.getElementsByClassName('cell');
+			for (var i = 0; i < elementsMass.length; i++){
+				elementsMass[i].className = 'cell';
+			};
+			counter.clean();
+		}
+
+
+		document.getElementById('clean').onclick = function (){
+			clean();
+		}
+
+		wrapper.onmouseover = function(e) {
+			var elem = e ? e.target : window.event.srcElement;
+			id = elem.id;
+			if(document.getElementById(id).className == "cell"){
+				if(counter.getCount() % 2){
+					document.getElementById(id).classList.add('opacityX')}
+				else {
+					document.getElementById(id).classList.add('opacityO')}
+			}
+		}
+
+		wrapper.onmouseout = function(e) {
+			var elem = e ? e.target : window.event.srcElement;
+			id = elem.id;
+
+				document.getElementById(id).classList.remove('opacityX');
+				document.getElementById(id).classList.remove('opacityO');
+		}
+
+		var xWon = makeCounter();
+		var oWon = makeCounter();
+		var deadHeat = makeCounter();
+
+		function determineTheWinner(){
+			if ((x7.className == 'cell x' && x9.className == 'cell x' && x8.className == 'cell x') ||
+				(x4.className == 'cell x' && x5.className == 'cell x' && x6.className == 'cell x') ||
+				(x1.className == 'cell x' && x2.className == 'cell x' && x3.className == 'cell x') ||
+				(x7.className == 'cell x' && x4.className == 'cell x' && x1.className == 'cell x') ||
+				(x8.className == 'cell x' && x5.className == 'cell x' && x2.className == 'cell x') ||
+				(x9.className == 'cell x' && x6.className == 'cell x' && x3.className == 'cell x') ||
+				(x7.className == 'cell x' && x5.className == 'cell x' && x3.className == 'cell x') ||
+				(x1.className == 'cell x' && x5.className == 'cell x' && x9.className == 'cell x')
+				) {
+				xWon.increaseCount();
+				alert('x won');
+				clean();
+				xWonCounter.innerHTML = xWon.getCount() - 1;
+			}
+			if ((x7.className == 'cell o' && x9.className == 'cell o' && x8.className == 'cell o') ||
+				(x4.className == 'cell o' && x5.className == 'cell o' && x6.className == 'cell o') ||
+				(x1.className == 'cell o' && x2.className == 'cell o' && x3.className == 'cell o') ||
+				(x7.className == 'cell o' && x4.className == 'cell o' && x1.className == 'cell o') ||
+				(x8.className == 'cell o' && x5.className == 'cell o' && x2.className == 'cell o') ||
+				(x9.className == 'cell o' && x6.className == 'cell o' && x3.className == 'cell o') ||
+				(x7.className == 'cell o' && x5.className == 'cell o' && x3.className == 'cell o') ||
+				(x1.className == 'cell o' && x5.className == 'cell o' && x9.className == 'cell o')
+				) {
+				oWon.increaseCount();
+				alert('o won');
+				clean();
+				oWonCounter.innerHTML = oWon.getCount() - 1;
+			}
+			if(counter.getCount() == 10){
+				deadHeat.increaseCount();
+				alert('dead heat');
+				clean();
+				deadHeatCounter.innerHTML = deadHeat.getCount() - 1;
+			}
+		}
+	</script>
+	<style>
+		html{
+			cursor: url('cursor.png'), pointer;
+		}
+		body{
+			background-color: #E1E15D;
+		}
+		.mainWrap{
+			width: 1200px;
+    		margin: auto;
+		}
+		.wrapper {
+		    width: 550px;
+		    height: 430px;
+		    background: url('background.png') 0px 5px;
+		    margin: 0px auto 15px;
+		    background-size: 550px;
+		    padding: 5px 5px 5px 7px;
+		    border-radius: 25px;
+		}
+		.cell {
+		    width: 165px;
+		    height: 130px;
+		    float: left;
+		    margin: 3px;
+		}
+		
+		.opacityX {
+			background: url('x.png') 10px no-repeat;
+   		    background-size: 155px;
+       		opacity: 0.25;
+		}
+		
+		.opacityO {
+			background: url('o.png') 10px no-repeat;
+   		    background-size: 155px;
+       		opacity: 0.35;
+		}
+		div.x {
+			background: url('x.png') 10px no-repeat;
+   		    background-size: 155px;
+       		opacity: 0.75;
+		}
+		div.o {
+			background: url('o.png') 10px no-repeat;
+   		    background-size: 155px;
+       		opacity: 0.75;
+		}
+		.buttonClean {
+			width: 150px;
+			height: 30px;
+		}
+   		.buttonClean {
+	   		width: 85px;
+	   		height: 30px;
+	   		background-color: #7C98DB;
+	   		color: white;
+	   		font-size: 25px;
+	   		padding: 5px 15px;
+	   		text-align: center;
+	   		border-radius: 10px;
+	   		margin: auto;
+	   		cursor: pointer;
+	   		font-family: 'Comic Sans MS';
+	   		line-height: 30px;
+		}
+		.scoreboard{
+			width: 390px;
+    		margin: 0px;
+		}
+		.scoreboard div{
+		    background: url('line.png') 0px 30px no-repeat;
+		    background-size: 350px 15px;
+		    width: 280px;
+		    height: 50px;
+		    font-size: 25px;
+		    color: white;
+		    font-weight: bold;
+		    padding-left: 30px;
+		    padding-right: 40px;
+		    font-family: 'Comic Sans MS';
+		}
+		.scoreboard div span {
+			float:right;
+		}
+	</style>
+</body>
+</html>
